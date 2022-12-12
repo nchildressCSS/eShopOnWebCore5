@@ -55,6 +55,7 @@ namespace Microsoft.eShopWeb.Web.Services
                 {
                     Id = i.Id,
                     Name = i.Name,
+                    ItemColor = i.ItemColor,
                     PictureUri = _uriComposer.ComposePicUri(i.PictureUri),
                     Price = i.Price
                 }).ToList(),
