@@ -36,6 +36,14 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
                     await catalogContext.SaveChangesAsync();
                 }
 
+                if (!await catalogContext.CatalogPrices.AnyAsync())
+                {
+                    await catalogContext.CatalogPrices.AddRangeAsync(
+                        GetPreconfiguredCatalogPrices());
+
+                    await catalogContext.SaveChangesAsync();
+                }
+
                 if (!await catalogContext.CatalogItems.AnyAsync())
                 {
                     await catalogContext.CatalogItems.AddRangeAsync(
