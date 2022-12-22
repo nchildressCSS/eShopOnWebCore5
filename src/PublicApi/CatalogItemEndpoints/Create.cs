@@ -46,7 +46,7 @@ namespace Microsoft.eShopWeb.PublicApi.CatalogItemEndpoints
                 throw new DuplicateException($"A catalogItem with name {request.Name} already exists");
             }
 
-            var newItem = new CatalogItem(request.CatalogTypeId, request.CatalogBrandId, request.Description, request.Name, request.Price, request.PictureUri);
+            var newItem = new CatalogItem(request.CatalogTypeId, request.CatalogBrandId, request.CatalogPriceId, request.Description, request.Name, request.ItemColor, request.Price, request.PictureUri);
             newItem = await _itemRepository.AddAsync(newItem, cancellationToken);
 
             if (newItem.Id != 0)

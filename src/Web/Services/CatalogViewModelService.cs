@@ -21,6 +21,7 @@ namespace Microsoft.eShopWeb.Web.Services
         private readonly IRepository<CatalogItem> _itemRepository;
         private readonly IRepository<CatalogBrand> _brandRepository;
         private readonly IRepository<CatalogType> _typeRepository;
+        private readonly IRepository<CatalogPrice> _priceRepository;
         private readonly IUriComposer _uriComposer;
 
         public CatalogViewModelService(
@@ -28,22 +29,24 @@ namespace Microsoft.eShopWeb.Web.Services
             IRepository<CatalogItem> itemRepository,
             IRepository<CatalogBrand> brandRepository,
             IRepository<CatalogType> typeRepository,
+            IRepository<CatalogPrice> priceRepository,
             IUriComposer uriComposer)
         {
             _logger = loggerFactory.CreateLogger<CatalogViewModelService>();
             _itemRepository = itemRepository;
             _brandRepository = brandRepository;
             _typeRepository = typeRepository;
+            _priceRepository = priceRepository;
             _uriComposer = uriComposer;
         }
 
-        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId)
+        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId, int? priceId)
         {
             _logger.LogInformation("GetCatalogItems called.");
 
-            var filterSpecification = new CatalogFilterSpecification(brandId, typeId);
+            var filterSpecification = new CatalogFilterSpecification(brandId, typeId, priceId);
             var filterPaginatedSpecification =
-                new CatalogFilterPaginatedSpecification(itemsPage * pageIndex, itemsPage, brandId, typeId);
+                new CatalogFilterPaginatedSpecification(itemsPage * pageIndex, itemsPage, brandId, typeId, priceId);
 
             // the implementation below using ForEach and Count. We need a List.
             var itemsOnPage = await _itemRepository.ListAsync(filterPaginatedSpecification);
@@ -61,8 +64,10 @@ namespace Microsoft.eShopWeb.Web.Services
                 }).ToList(),
                 Brands = (await GetBrands()).ToList(),
                 Types = (await GetTypes()).ToList(),
+                Prices = (await GetPrices()).ToList(),
                 BrandFilterApplied = brandId ?? 0,
                 TypesFilterApplied = typeId ?? 0,
+                PricesFilterApplied = priceId ?? 0,
                 PaginationInfo = new PaginationInfoViewModel()
                 {
                     ActualPage = pageIndex,
@@ -102,6 +107,22 @@ namespace Microsoft.eShopWeb.Web.Services
             var items = types
                 .Select(type => new SelectListItem() { Value = type.Id.ToString(), Text = type.Type })
                 .OrderBy(t => t.Text)
+                .ToList();
+
+            var allItem = new SelectListItem() { Value = null, Text = "All", Selected = true };
+            items.Insert(0, allItem);
+
+            return items;
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetPrices()
+        {
+            _logger.LogInformation("GetPrices called.");
+            var prices = await _priceRepository.ListAsync();
+
+            var items = prices
+                .Select(price => new SelectListItem() { Value = price.Id.ToString(), Text = price.Price })
+                .OrderBy(p => p.Text)
                 .ToList();
 
             var allItem = new SelectListItem() { Value = null, Text = "All", Selected = true };

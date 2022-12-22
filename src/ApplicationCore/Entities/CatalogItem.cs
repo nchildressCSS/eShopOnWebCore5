@@ -14,10 +14,13 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities
         public CatalogType CatalogType { get; private set; }
         public int CatalogBrandId { get; private set; }
         public CatalogBrand CatalogBrand { get; private set; }
-        public String ItemColor { get; private set; }
+        public int CatalogPriceId { get; private set; }
+        public CatalogBrand CatalogPrice { get; private set; }
+        public string ItemColor { get; private set; }
 
         public CatalogItem(int catalogTypeId,
             int catalogBrandId,
+            int catalogPriceId,
             string description,
             string name,
             string itemColor,
@@ -26,6 +29,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities
         {
             CatalogTypeId = catalogTypeId;
             CatalogBrandId = catalogBrandId;
+            CatalogPriceId = catalogPriceId;
             Description = description;
             Name = name;
             ItemColor = itemColor;
@@ -56,6 +60,12 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities
         {
             Guard.Against.Zero(catalogTypeId, nameof(catalogTypeId));
             CatalogTypeId = catalogTypeId;
+        }
+
+        public void UpdatePrice(int catalogPriceId)
+        {
+            Guard.Against.Zero(catalogPriceId, nameof(catalogPriceId));
+            CatalogPriceId = catalogPriceId;
         }
 
         public void UpdatePictureUri(string pictureName)

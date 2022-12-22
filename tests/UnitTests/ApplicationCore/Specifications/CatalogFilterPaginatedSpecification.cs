@@ -10,7 +10,7 @@ namespace Microsoft.eShopWeb.UnitTests.ApplicationCore.Specifications
         [Fact]
         public void ReturnsAllCatalogItems()
         {
-            var spec = new eShopWeb.ApplicationCore.Specifications.CatalogFilterPaginatedSpecification(0, 10, null, null);
+            var spec = new eShopWeb.ApplicationCore.Specifications.CatalogFilterPaginatedSpecification(0, 10, null, null, null);
 
             var result = GetTestCollection()
                 .AsQueryable()
@@ -23,7 +23,7 @@ namespace Microsoft.eShopWeb.UnitTests.ApplicationCore.Specifications
         [Fact]
         public void Returns2CatalogItemsWithSameBrandAndTypeId()
         {
-            var spec = new eShopWeb.ApplicationCore.Specifications.CatalogFilterPaginatedSpecification(0, 10, 1, 1);
+            var spec = new eShopWeb.ApplicationCore.Specifications.CatalogFilterPaginatedSpecification(0, 10, 1, 1, 1);
 
             var result = GetTestCollection()
                 .AsQueryable()
@@ -37,10 +37,10 @@ namespace Microsoft.eShopWeb.UnitTests.ApplicationCore.Specifications
         {
             var catalogItemList = new List<CatalogItem>();
 
-            catalogItemList.Add(new CatalogItem(1, 1, "Item 1", "Item 1", 1.00m, "TestUri1"));
-            catalogItemList.Add(new CatalogItem(1, 1, "Item 1.5", "Item 1.5", 1.50m, "TestUri1"));
-            catalogItemList.Add(new CatalogItem(2, 2, "Item 2", "Item 2", 2.00m, "TestUri2"));
-            catalogItemList.Add(new CatalogItem(3, 3, "Item 3", "Item 3", 3.00m, "TestUri3"));
+            catalogItemList.Add(new CatalogItem(1, 1, 1, "Item 1", "Item 1", "test", 1.00m, "TestUri1"));
+            catalogItemList.Add(new CatalogItem(1, 1, 1, "Item 1.5", "Item 1.5", "test", 1.50m, "TestUri1"));
+            catalogItemList.Add(new CatalogItem(2, 2, 2, "Item 2", "Item 2", "test", 2.00m, "TestUri2"));
+            catalogItemList.Add(new CatalogItem(3, 3, 3, "Item 3", "Item 3", "test", 3.00m, "TestUri3"));
 
             return catalogItemList;
         }

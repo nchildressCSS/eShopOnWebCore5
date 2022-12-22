@@ -40,14 +40,16 @@ namespace Microsoft.eShopWeb.PublicApi.CatalogItemEndpoints
         {
             var response = new ListPagedCatalogItemResponse(request.CorrelationId());
 
-            var filterSpec = new CatalogFilterSpecification(request.CatalogBrandId, request.CatalogTypeId);
+            var filterSpec = new CatalogFilterSpecification(request.CatalogBrandId, request.CatalogTypeId, request.CatalogPriceId);
             int totalItems = await _itemRepository.CountAsync(filterSpec, cancellationToken);
 
             var pagedSpec = new CatalogFilterPaginatedSpecification(
                 skip: request.PageIndex * request.PageSize,
                 take: request.PageSize,
                 brandId: request.CatalogBrandId,
-                typeId: request.CatalogTypeId);
+                typeId: request.CatalogTypeId,
+                priceId: request.CatalogPriceId);
+
 
             var items = await _itemRepository.ListAsync(pagedSpec, cancellationToken);
 
